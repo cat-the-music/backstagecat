@@ -12,7 +12,7 @@
   --gold2: #f0d060;
   --text: #f0ece4;
   --text2: #e8dcc8;
-  --text3: #c8a870;
+  --text3:#ddd0b0;
   --danger: #c0392b;
   --nav-h: 58px;
   --safe-b: env(safe-area-inset-bottom, 0px);
@@ -314,8 +314,8 @@ textarea { resize: vertical; }
   }
   .tnav-btn {
     padding: 0 16px; height: 52px; display: flex; align-items: center;
-    background: none; border: none; color: var(--text3); cursor: pointer;
-    font-family: 'Noto Serif TC',serif; font-size: .85rem; transition: color .15s;
+    background: none; border: none; color: #e8d4b0; cursor: pointer;
+    font-family: 'Noto Serif TC',serif; font-size: 1.05rem; transition: color .15s;
     border-bottom: 2px solid transparent;
   }
   .tnav-btn.active { color: var(--gold); border-bottom-color: var(--gold); }
@@ -323,6 +323,31 @@ textarea { resize: vertical; }
   .song-grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 6px; }
   .song-cell { padding: 9px 11px; }
   .song-cell-title { font-size: .92rem; }
+
+  /* 新增/匯出頁置中，最寬 600px */
+  #new-page-add, #new-page-export {
+    align-items: center;
+  }
+  #new-page-add > *, #new-page-export > * {
+    width: 100%;
+    max-width: 600px;
+  }
+  /* 歌曲清單頁：全寬，無 padding，高度填滿 */
+  #new-page-browse {
+    padding: 0 !important;
+    overflow: hidden;
+  }
+  #new-page-browse.active {
+    display: flex !important;
+    flex-direction: column;
+  }
+  /* 次要文字調亮 */
+  .new-filter-label { color: #ddd0b0; }
+  .new-count-bar { color: #dcd0a0; }
+  .new-hint { color: #ddd0b0; }
+  .browse-artist-name { font-size: 17px; color: #e0c878; }
+  .browse-artist-count { font-size: 13px; color: #d4c09a; }
+  .browse-songs-wrap { font-size: 14px !important; color: #c8b888 !important; line-height: 2.4; }
 }
 @media (max-width: 767px) { .top-nav { display: none; } }
 
@@ -372,6 +397,103 @@ textarea { resize: vertical; }
 
   @media (min-width: 768px) { #copyright-bar { display: none !important; } }
 
+@media (min-width: 768px) {
+  #browse-mobile-wrap { display: none !important; }
+  #browse-desktop-wrap {
+    display: flex;
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+  }
+  #browse-sidebar {
+    width: 190px; min-width: 190px; flex-shrink: 0;
+    border-right: 1px solid rgba(200,160,80,.1);
+    overflow-y: auto; padding: 16px 12px;
+    display: flex; flex-direction: column; gap: 2px;
+    background: rgba(8,7,3,.7);
+    align-self: stretch;
+  }
+  .bsb-search-wrap { margin-bottom: 12px; }
+  .bsb-search-wrap input {
+    width: 100%; background: rgba(255,255,255,.05);
+    border: 1px solid rgba(200,160,80,.45); border-radius: 8px;
+    padding: 7px 10px; color: #e8e0d0; font-size: 13px;
+    font-family: inherit; outline: none;
+  }
+  .bsb-search-wrap input::placeholder { color: #ddd0b0; }
+  .bsb-search-wrap input:focus { border-color: rgba(200,160,80,.5); }
+  .bsb-section-label { font-size: 11px; color: #ddd0b0; letter-spacing:.06em; margin-bottom: 5px; }
+  .bsb-filter-row { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 2px; }
+  .bsb-tag {
+    font-size: 12px; padding: 3px 9px; border-radius: 20px;
+    border: 1px solid rgba(200,160,80,.3); color: #c8a868;
+    cursor: pointer; transition: all .15s; white-space: nowrap;
+  }
+  .bsb-tag:hover { border-color: rgba(200,160,80,.5); color: #c8a050; }
+  .bsb-tag.active { background: rgba(200,160,80,.15); border-color: rgba(200,160,80,.5); color: #c8a050; }
+  #bsb-artist-list { display: flex; flex-direction: column; margin-top: 2px; }
+  .bsb-artist-item {
+    font-size: 13px; padding: 6px 8px; color: #c8b080;
+    cursor: pointer; border-radius: 6px;
+    display: flex; justify-content: space-between; align-items: baseline;
+    transition: background .12s, color .12s;
+  }
+  .bsb-artist-item:hover { background: rgba(200,160,80,.08); color: #c8a050; }
+  .bsb-artist-item.active { background: rgba(200,160,80,.15); color: #e0c878; font-weight: 500; }
+  .bsb-artist-count { font-size: 11px; opacity: .6; }
+  .bsb-more-toggle {
+    font-size: 12px; padding: 6px 8px; color: #ddd0b0;
+    cursor: pointer; border-radius: 6px;
+    border: 1px solid rgba(200,160,80,.12);
+    margin-top: 6px; text-align: center; transition: all .15s;
+  }
+  .bsb-more-toggle:hover { border-color: rgba(200,160,80,.3); color: #9a8860; }
+  .bsb-more-sub { display: none; flex-direction: column; }
+  .bsb-more-sub.open { display: flex; }
+  #browse-main { flex: 1; overflow-y: auto; padding: 20px 28px; }
+  .bsb-count-bar { font-size: 13px; color: #d4c09a; margin-bottom: 16px; }
+  .bsb-artist-block {
+    margin-bottom: 20px;
+    background: rgba(200,160,80,.04);
+    border-radius: 8px;
+    border-left: 3px solid rgba(200,160,80,.5);
+    padding: 14px 16px 12px;
+  }
+  .bsb-artist-header {
+    display: flex; align-items: baseline; gap: 10px;
+    padding-bottom: 8px; border-bottom: 1px solid rgba(200,160,80,.12);
+    margin-bottom: 10px;
+  }
+  .bsb-artist-name { font-size: 18px; font-weight: 500; color: #e0c878; font-family: "Noto Serif SC",serif; }
+  .bsb-artist-cnt { font-size: 13px; color: #ddd0b0; }
+  .bsb-songs-flow { font-size: 15px; color: #d0c0a0; line-height: 2.2; word-break: normal; overflow-wrap: normal; }
+  .bsb-song-item { cursor: pointer; border-radius: 3px; padding: 1px 3px; transition: color .12s, background .12s; white-space: nowrap; }
+  .bsb-song-item:hover { color: #e8c870; background: rgba(200,160,80,.1); }
+  .bsb-sep { color: rgba(200,160,80,.35); padding: 0 2px; }
+  .bsb-more-block .bsb-artist-header { cursor: pointer; }
+  .bsb-more-block .bsb-artist-header:hover .bsb-artist-name { color: #e8c870; }
+  .bsb-more-content { display: none; }
+  .bsb-more-content.open { display: block; }
+
+  #browse-sidebar::-webkit-scrollbar,
+  #browse-main::-webkit-scrollbar { width: 4px; }
+  #browse-sidebar::-webkit-scrollbar-track,
+  #browse-main::-webkit-scrollbar-track { background: transparent; }
+  #browse-sidebar::-webkit-scrollbar-thumb,
+  #browse-main::-webkit-scrollbar-thumb {
+    background: rgba(200,160,80,.25); border-radius: 2px;
+  }
+  #browse-sidebar::-webkit-scrollbar-thumb:hover,
+  #browse-main::-webkit-scrollbar-thumb:hover {
+    background: rgba(200,160,80,.45);
+  }
+}
+
+@media (max-width: 767px) {
+  #browse-desktop-wrap { display: none !important; }
+  #browse-mobile-wrap { display: block; }
+}
+
 /* ═══ 新版三分頁管理介面 ═══ */
 * { touch-action: manipulation; }
 body { background: #000000 !important; display: flex; flex-direction: column; overflow: hidden !important; height: 100vh; box-sizing: border-box; padding-bottom: 22px; }
@@ -381,7 +503,7 @@ body { background: #000000 !important; display: flex; flex-direction: column; ov
 .fs-btn {
   width: 26px; height: 26px; border-radius: 50%;
   background: transparent; border: 1px solid rgba(200,160,80,.2);
-  color: #6a5a3a; cursor: pointer; font-family: inherit;
+  color: #d4c09a; cursor: pointer; font-family: inherit;
   display: flex; align-items: center; justify-content: center;
   transition: all .15s;
 }
@@ -395,7 +517,7 @@ body { background: #000000 !important; display: flex; flex-direction: column; ov
 }
 .new-tab {
   flex: 1; text-align: center; padding: 15px 8px 13px;
-  font-size: 13px; color: #8a7a5a; cursor: pointer;
+  font-size: 16px; color: #e8d4b0; cursor: pointer;
   border-bottom: 2px solid transparent; transition: color .2s, border-color .2s;
   font-family: 'Noto Serif SC','Noto Serif TC',serif;
 }
@@ -405,7 +527,7 @@ body { background: #000000 !important; display: flex; flex-direction: column; ov
 .new-page.active { display: flex; flex-direction: column; flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 14px 14px 40px; }
 
 .new-top-bar { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 14px; }
-.new-top-count { font-size: 12px; color: #8a7a5a; font-family: 'Noto Serif SC',serif; }
+.new-top-count { font-size: 12px; color: #e4cfa8; font-family: 'Noto Serif SC',serif; }
 .new-top-count span { color: #c8a050; font-size: 16px; font-weight: 500; margin-right: 3px; }
 
 .new-field { margin-bottom: 10px; }
@@ -429,7 +551,7 @@ body { background: #000000 !important; display: flex; flex-direction: column; ov
 .new-field textarea { resize: none; height: 72px; line-height: 1.6; }
 
 .new-convert-hint {
-  font-size: 11px; color: #6a5a3a; padding-left: 4px;
+  font-size: 11px; color: #9a8860; padding-left: 4px;
   overflow: hidden; max-height: 0; transition: max-height .2s;
 }
 .new-convert-hint.active { max-height: 30px; margin-bottom: 10px; color: #c8a050; }
@@ -447,6 +569,7 @@ body { background: #000000 !important; display: flex; flex-direction: column; ov
 }
 .new-suggest-item:last-child { border-bottom: none; }
 .new-suggest-item:active { background: rgba(200,160,80,.1); color: #c8a050; }
+.new-suggest-item:hover, .new-suggest-item.focused { background: rgba(200,160,80,.12); color: #e8c870; }
 
 .new-field-row { display: flex; gap: 8px; margin-bottom: 10px; }
 .new-field-row .new-field { flex: 1; margin-bottom: 0; }
@@ -468,7 +591,7 @@ body { background: #000000 !important; display: flex; flex-direction: column; ov
 .new-star-btn {
   flex-shrink: 0; padding: 0 16px; background: #111008;
   border: 1px solid rgba(200,160,80,.22); border-radius: 10px;
-  color: #7a6a4a; font-size: 13px; font-family: inherit; cursor: pointer; white-space: nowrap;
+  color: #ddd0b0; font-size: 13px; font-family: inherit; cursor: pointer; white-space: nowrap;
 }
 .new-star-btn.active { border-color: #c8a050; color: #c8a050; background: rgba(200,160,80,.08); }
 
@@ -496,21 +619,21 @@ body { background: #000000 !important; display: flex; flex-direction: column; ov
   font-size: 14px; color: #e8e0d0;
   font-family: 'Noto Serif SC','Noto Serif TC',serif;
 }
-.new-search-row input::placeholder { color: #6a5a3a; }
-.new-x-btn { background: none; border: none; color: #6a5a3a; cursor: pointer; font-size: 16px; }
+.new-search-row input::placeholder { color: #d4c09a; }
+.new-x-btn { background: none; border: none; color: #d4c09a; cursor: pointer; font-size: 16px; }
 
 .new-filter-section { margin-bottom: 12px; }
-.new-filter-label { font-size: 11px; color: #7a6a4a; letter-spacing: .08em; margin-bottom: 7px; }
+.new-filter-label { font-size: 11px; color: #ddd0b0; letter-spacing: .08em; margin-bottom: 7px; }
 .new-filter-row { display: flex; flex-wrap: wrap; gap: 6px; }
 .nftag {
   font-size: 12px; padding: 5px 12px; border-radius: 20px;
-  border: 1px solid rgba(200,160,80,.2); color: #8a7a5a;
+  border: 1px solid rgba(200,160,80,.25); color: #dcd0a0;
   background: transparent; cursor: pointer; white-space: nowrap;
   font-family: 'Noto Serif SC',serif;
 }
 .nftag.active { background: rgba(200,160,80,.12); border-color: #c8a050; color: #c8a050; }
 
-.new-count-bar { font-size: 12px; color: #6a5a3a; margin-bottom: 8px; }
+.new-count-bar { font-size: 12px; color: #d4c09a; margin-bottom: 8px; }
 .new-hint { font-size: 11px; color: #4a3a1e; margin-bottom: 14px; text-align: center; }
 
 /* 瀏覽模式歌手區塊 */
@@ -521,8 +644,8 @@ body { background: #000000 !important; display: flex; flex-direction: column; ov
   padding-bottom: 6px; border-bottom: 0.5px solid rgba(200,160,80,.15);
 }
 .browse-artist-name { font-size: 15px; font-weight: 500; color: #c8a050; font-family: 'Noto Serif SC',serif; }
-.browse-artist-count { font-size: 12px; color: #6a5a3a; }
-.browse-songs-wrap { font-size: var(--browse-fs); color: #a89880; line-height: 2.2; }
+.browse-artist-count { font-size: 12px; color: #d4c09a; }
+.browse-songs-wrap { font-size: var(--browse-fs); color: #c0b090; line-height: 2.4; }
 .browse-si { display: inline; cursor: default; padding: 1px 2px; border-radius: 3px; white-space: nowrap; }
 .browse-si.hidden { display: none; }
 .browse-si.clickable { cursor: pointer; }
@@ -533,12 +656,12 @@ body { background: #000000 !important; display: flex; flex-direction: column; ov
 
 /* 匯出頁 */
 .new-export-section { margin-bottom: 22px; }
-.new-export-label { font-size: 11px; color: #7a6a4a; letter-spacing: .1em; margin-bottom: 8px; }
+.new-export-label { font-size: 11px; color: #ddd0b0; letter-spacing: .1em; margin-bottom: 8px; }
 .new-name-row { display: flex; gap: 8px; margin-bottom: 10px; }
 .new-name-btn {
   flex: 1; padding: 10px 8px; background: #111008;
   border: 1px solid rgba(200,160,80,.22); border-radius: 10px;
-  color: #7a6a4a; font-size: 13px; font-family: inherit; cursor: pointer; text-align: center;
+  color: #ddd0b0; font-size: 13px; font-family: inherit; cursor: pointer; text-align: center;
 }
 .new-name-btn.active { border-color: #c8a050; color: #c8a050; background: rgba(200,160,80,.08); }
 .new-name-custom { margin-bottom: 10px; }
@@ -555,7 +678,7 @@ body { background: #000000 !important; display: flex; flex-direction: column; ov
   display: block;
 }
 .new-export-btn:active { background: #181408; border-color: rgba(200,160,80,.5); }
-.new-export-sub { font-size: 12px; color: #7a6a4a; display: block; margin-top: 3px; }
+.new-export-sub { font-size: 12px; color: #ddd0b0; display: block; margin-top: 3px; }
 .new-backup-btn {
   width: 100%; padding: 15px; background: transparent;
   border: 1px solid rgba(200,160,80,.35); border-radius: 12px; color: #c8a050;
@@ -564,7 +687,7 @@ body { background: #000000 !important; display: flex; flex-direction: column; ov
 }
 .new-backup-btn:active { background: rgba(200,160,80,.06); }
 .new-export-desc {
-  font-size: 13px; color: #7a6a4a; line-height: 1.8;
+  font-size: 13px; color: #ddd0b0; line-height: 1.8;
   margin-bottom: 20px; padding: 14px;
   background: #111008; border: 1px solid rgba(200,160,80,.15);
   border-radius: 10px;
@@ -576,6 +699,10 @@ body { background: #000000 !important; display: flex; flex-direction: column; ov
   background: rgba(0,0,0,.75); z-index: 200;
   align-items: flex-end; justify-content: center;
 }
+@media (min-width: 768px) {
+  .new-modal-bg { align-items: center; }
+  .new-modal { border-radius: 16px; max-width: 520px; }
+}
 .new-modal-bg.active { display: flex; }
 .new-modal {
   background: #131108; border-radius: 16px 16px 0 0;
@@ -586,10 +713,10 @@ body { background: #000000 !important; display: flex; flex-direction: column; ov
 .new-modal-header {
   display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;
 }
-.new-modal-header span { font-size: 13px; color: #8a7a5a; }
-.new-close-btn { background: none; border: none; color: #6a5a3a; cursor: pointer; font-size: 20px; padding: 0; }
+.new-modal-header span { font-size: 13px; color: #d4c09a; }
+.new-close-btn { background: none; border: none; color: #d4c09a; cursor: pointer; font-size: 20px; padding: 0; }
 .new-m-field { margin-bottom: 10px; }
-.new-m-field label { font-size: 12px; color: #8a7a5a; display: block; margin-bottom: 4px; }
+.new-m-field label { font-size: 12px; color: #d4c09a; display: block; margin-bottom: 4px; }
 .new-m-field input, .new-m-field select {
   width: 100%; background: #111008; border: 1px solid rgba(200,160,80,.2);
   border-radius: 8px; padding: 10px 12px; color: #e8e0d0; font-family: inherit; font-size: 14px; outline: none;
@@ -657,7 +784,7 @@ body { background: #000000 !important; display: flex; flex-direction: column; ov
   font-family: 'Noto Serif SC', serif;
 }
 .token-box p {
-  color: #7a6a4a;
+  color: #ddd0b0;
   font-size: 12px;
   margin-bottom: 16px;
   line-height: 1.6;
@@ -716,7 +843,7 @@ body { background: #000000 !important; display: flex; flex-direction: column; ov
 
   <!-- 歌手（含自動補全） -->
   <div class="new-field suggest-wrap">
-    <input type="text" id="new-artist" placeholder="歌手" oninput="onNewArtistInput(this.value)" autocomplete="off">
+    <input type="text" id="new-artist" placeholder="歌手" oninput="onNewArtistInput(this.value)" onkeydown="onNewArtistKeydown(event)" autocomplete="off">
     <div class="new-suggest-list" id="new-suggest-list"></div>
   </div>
   <div class="new-convert-hint" id="new-artist-hint"></div>
@@ -778,56 +905,93 @@ body { background: #000000 !important; display: flex; flex-direction: column; ov
 
 <!-- 分頁二：歌曲清單 -->
 <div class="new-page" id="new-page-browse">
-  <div style="display:flex;gap:8px;align-items:center;margin-bottom:14px;">
-    <div class="new-search-row" style="flex:1;margin-bottom:0;">
-      <span class="new-search-icon">🔍</span>
-      <input type="text" id="new-browse-search" placeholder="搜索歌名、歌手…" oninput="handleBrowseSearch(this.value)">
-      <button class="new-x-btn" id="new-browse-x" onclick="clearBrowseSearch()" style="display:none">✕</button>
+
+  <!-- 手機版 -->
+  <div id="browse-mobile-wrap">
+    <div style="display:flex;gap:8px;align-items:center;margin-bottom:14px;">
+      <div class="new-search-row" style="flex:1;margin-bottom:0;">
+        <span class="new-search-icon">🔍</span>
+        <input type="text" id="new-browse-search" placeholder="搜索歌名、歌手…" oninput="handleBrowseSearch(this.value)">
+        <button class="new-x-btn" id="new-browse-x" onclick="clearBrowseSearch()" style="display:none">✕</button>
+      </div>
+      <div class="fs-ctrl">
+        <button class="fs-btn" data-fs="0" onclick="applyBrowseFs(0)" title="小">小</button>
+        <button class="fs-btn active" data-fs="1" onclick="applyBrowseFs(1)" title="中">中</button>
+        <button class="fs-btn" data-fs="2" onclick="applyBrowseFs(2)" title="大">大</button>
+      </div>
     </div>
-    <div class="fs-ctrl">
-      <button class="fs-btn" data-fs="0" onclick="applyBrowseFs(0)" title="小">小</button>
-      <button class="fs-btn active" data-fs="1" onclick="applyBrowseFs(1)" title="中">中</button>
-      <button class="fs-btn" data-fs="2" onclick="applyBrowseFs(2)" title="大">大</button>
+    <div class="new-filter-section">
+      <div class="new-filter-label">语言</div>
+      <div class="new-filter-row" id="browse-lang-row">
+        <div class="nftag active" onclick="setBrowseFilter(this,'lang','')">全部</div>
+        <div class="nftag" onclick="setBrowseFilter(this,'lang','中文')">中文</div>
+        <div class="nftag" onclick="setBrowseFilter(this,'lang','粤语')">粤语</div>
+        <div class="nftag" onclick="setBrowseFilter(this,'lang','英文')">英文</div>
+        <div class="nftag" onclick="setBrowseFilter(this,'lang','日文')">日文</div>
+        <div class="nftag" onclick="setBrowseFilter(this,'lang','韩文')">韩文</div>
+      </div>
+    </div>
+    <div class="new-filter-section">
+      <div class="new-filter-label">风格</div>
+      <div class="new-filter-row" id="browse-genre-row">
+        <div class="nftag active" onclick="setBrowseFilter(this,'genre','')">全部</div>
+        <div class="nftag" onclick="setBrowseFilter(this,'genre','流行 Pop')">流行 Pop</div>
+        <div class="nftag" onclick="setBrowseFilter(this,'genre','R&B')">R&B</div>
+        <div class="nftag" onclick="setBrowseFilter(this,'genre','民谣 Folk')">民谣 Folk</div>
+        <div class="nftag" onclick="setBrowseFilter(this,'genre','City Pop')">City Pop</div>
+        <div class="nftag" onclick="setBrowseFilter(this,'genre','抒情 Ballad')">抒情 Ballad</div>
+        <div class="nftag" onclick="setBrowseFilter(this,'genre','Funk')">Funk</div>
+        <div class="nftag" onclick="setBrowseFilter(this,'genre','摇滚 Rock')">摇滚 Rock</div>
+        <div class="nftag" onclick="setBrowseFilter(this,'genre','说唱 Hip-hop')">说唱 Hip-hop</div>
+      </div>
+    </div>
+    <div class="new-filter-section">
+      <div class="new-filter-row">
+        <div class="nftag" id="browse-star-tag" onclick="toggleBrowseStar(this)">★ 主打歌</div>
+      </div>
+    </div>
+    <div class="new-count-bar" id="browse-count-bar">共 0 首</div>
+    <div class="new-hint" id="browse-hint">双击歌名可编辑</div>
+    <div id="browse-list"></div>
+  </div>
+
+  <!-- 桌面版：左右分欄 -->
+  <div id="browse-desktop-wrap">
+    <div id="browse-sidebar">
+      <div class="bsb-search-wrap" style="position:relative;">
+        <input type="text" id="new-browse-search-d" placeholder="搜索…" oninput="handleBrowseSearch(this.value)" style="padding-right:28px;">
+        <button id="bsb-search-x" onclick="clearBrowseSearchD()" style="display:none;position:absolute;right:8px;top:50%;transform:translateY(-50%);background:none;border:none;color:#c8b090;cursor:pointer;font-size:14px;padding:0;line-height:1;">✕</button>
+      </div>
+      <div class="bsb-section-label">語言</div>
+      <div class="bsb-filter-row" id="browse-lang-row-d">
+        <div class="bsb-tag active" onclick="setBrowseFilterD(this,'lang','')">全部</div>
+        <div class="bsb-tag" onclick="setBrowseFilterD(this,'lang','中文')">中文</div>
+        <div class="bsb-tag" onclick="setBrowseFilterD(this,'lang','粤语')">粵語</div>
+        <div class="bsb-tag" onclick="setBrowseFilterD(this,'lang','英文')">英語</div>
+        <div class="bsb-tag" onclick="setBrowseFilterD(this,'lang','日文')">日語</div>
+        <div class="bsb-tag" onclick="setBrowseFilterD(this,'lang','韩文')">韓語</div>
+      </div>
+      <div class="bsb-section-label" style="margin-top:14px;">風格</div>
+      <div class="bsb-filter-row" id="browse-genre-row-d">
+        <div class="bsb-tag active" onclick="setBrowseFilterD(this,'genre','')">全部</div>
+        <div class="bsb-tag" onclick="setBrowseFilterD(this,'genre','流行 Pop')">流行</div>
+        <div class="bsb-tag" onclick="setBrowseFilterD(this,'genre','R&B')">R&B</div>
+        <div class="bsb-tag" onclick="setBrowseFilterD(this,'genre','民谣 Folk')">民謠</div>
+        <div class="bsb-tag" onclick="setBrowseFilterD(this,'genre','City Pop')">City Pop</div>
+        <div class="bsb-tag" onclick="setBrowseFilterD(this,'genre','抒情 Ballad')">抒情</div>
+        <div class="bsb-tag" onclick="setBrowseFilterD(this,'genre','摇滚 Rock')">搖滾</div>
+        <div class="bsb-tag" onclick="setBrowseFilterD(this,'genre','说唱 Hip-hop')">說唱</div>
+        <div class="bsb-tag" onclick="setBrowseFilterD(this,'genre','Funk')">Funk</div>
+      </div>
+      <div class="bsb-section-label" style="margin-top:14px;">歌手</div>
+      <div id="bsb-artist-list"></div>
+    </div>
+    <div id="browse-main">
+      <div class="bsb-count-bar" id="browse-count-bar-d">共 0 首</div>
+      <div id="browse-list-d"></div>
     </div>
   </div>
 
-  <div class="new-filter-section">
-    <div class="new-filter-label">语言</div>
-    <div class="new-filter-row" id="browse-lang-row">
-      <div class="nftag active" onclick="setBrowseFilter(this,'lang','')">全部</div>
-      <div class="nftag" onclick="setBrowseFilter(this,'lang','中文')">中文</div>
-      <div class="nftag" onclick="setBrowseFilter(this,'lang','粤语')">粤语</div>
-      <div class="nftag" onclick="setBrowseFilter(this,'lang','英文')">英文</div>
-      <div class="nftag" onclick="setBrowseFilter(this,'lang','日文')">日文</div>
-      <div class="nftag" onclick="setBrowseFilter(this,'lang','韩文')">韩文</div>
-    </div>
-  </div>
-
-  <div class="new-filter-section">
-    <div class="new-filter-label">风格</div>
-    <div class="new-filter-row" id="browse-genre-row">
-      <div class="nftag active" onclick="setBrowseFilter(this,'genre','')">全部</div>
-      <div class="nftag" onclick="setBrowseFilter(this,'genre','流行 Pop')">流行 Pop</div>
-      <div class="nftag" onclick="setBrowseFilter(this,'genre','R&B')">R&B</div>
-      <div class="nftag" onclick="setBrowseFilter(this,'genre','民谣 Folk')">民谣 Folk</div>
-      <div class="nftag" onclick="setBrowseFilter(this,'genre','City Pop')">City Pop</div>
-      <div class="nftag" onclick="setBrowseFilter(this,'genre','抒情 Ballad')">抒情 Ballad</div>
-      <div class="nftag" onclick="setBrowseFilter(this,'genre','Funk')">Funk</div>
-      <div class="nftag" onclick="setBrowseFilter(this,'genre','摇滚 Rock')">摇滚 Rock</div>
-      <div class="nftag" onclick="setBrowseFilter(this,'genre','说唱 Hip-hop')">说唱 Hip-hop</div>
-    </div>
-  </div>
-
-  <div class="new-filter-section">
-    <div class="new-filter-row">
-      <div class="nftag" id="browse-star-tag" onclick="toggleBrowseStar(this)">★ 主打歌</div>
-    </div>
-  </div>
-
-  <div class="new-count-bar" id="browse-count-bar">共 0 首</div>
-  <div class="new-hint" id="browse-hint">双击歌名可编辑</div>
-
-  <div id="browse-list"></div>
 </div>
 
 <!-- 分頁三：匯出 -->
@@ -838,14 +1002,14 @@ body { background: #000000 !important; display: flex; flex-direction: column; ov
       <div class="new-export-label" style="margin-bottom:0;">个人资料</div>
       <div class="new-top-count" style="font-size:12px;"><span id="new-export-count">0</span>首歌曲</div>
     </div>
-    <div style="font-size:.78rem;color:#7a6a4a;margin-bottom:6px;">歌手名（档案命名）</div>
+    <div style="font-size:.78rem;color:#c8b090;margin-bottom:6px;">歌手名（档案命名）</div>
     <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px;align-items:center;">
       <button class="name-preset-btn" onclick="selectNamePreset('王奕为',this)">王奕为</button>
       <button class="name-preset-btn active" onclick="selectNamePreset('猫欢喜',this)">猫欢喜</button>
       <button class="name-preset-btn name-custom-btn" id="name-custom-btn2" onclick="toggleCustomName2(this)">自填…</button>
       <input type="text" id="s-aud-name2" placeholder="自订名称" style="display:none;flex:1;min-width:80px;background:#111008;border:1px solid rgba(200,160,80,.22);border-radius:8px;padding:7px 10px;color:#e8e0d0;font-family:inherit;font-size:13px;outline:none;" oninput="saveSetting('audName',this.value)">
     </div>
-    <div style="font-size:.78rem;color:#7a6a4a;margin-bottom:4px;">说明文字（选填）</div>
+    <div style="font-size:.78rem;color:#c8b090;margin-bottom:4px;">说明文字（选填）</div>
     <textarea id="s-desc2" placeholder="例如：专业歌手，擅长流行与爵士" oninput="saveSetting('desc',this.value)" style="width:100%;background:#111008;border:1px solid rgba(200,160,80,.22);border-radius:8px;padding:8px 12px;color:#e8e0d0;font-family:inherit;font-size:13px;outline:none;resize:none;height:54px;"></textarea>
   </div>
 
@@ -875,7 +1039,7 @@ body { background: #000000 !important; display: flex; flex-direction: column; ov
   </div>
 
   <div style="text-align:right;margin-top:4px;">
-    <button onclick="checkMissingData()" style="background:none;border:none;color:#4a3a20;font-size:11px;font-family:inherit;cursor:pointer;padding:4px 0;">⚠ 检查缺漏资料</button>
+    <button onclick="checkMissingData()" style="background:none;border:none;color:#9a8060;font-size:11px;font-family:inherit;cursor:pointer;padding:4px 0;">⚠ 检查缺漏资料</button>
   </div>
 
 </div><!-- /new-page-export -->
@@ -1748,7 +1912,7 @@ function _exportSinglePageHtml(targetPage, filename){
 }
 
 function exportAudienceHtml(returnOnly){
-  var name = settings.audName || settings.name || '线上版';
+  var name = settings.audName || settings.name || '猫欢喜';
   var stamp = new Date().toISOString().slice(0,10).replace(/-/g,'.');
   var filename = name+'_歌单_'+stamp+'.html';
 
@@ -1788,9 +1952,11 @@ function exportAudienceHtml(returnOnly){
   // 其他歌手按歌曲數和語言分組
   // 直接從songs計算每個歌手的歌曲數
   var nonMajorCounts = {};
+  var noArtistSongs = [];
   songs.forEach(function(s){
     var a = s.artist||'';
-    if(a && !majorSet.has(a)) nonMajorCounts[a] = (nonMajorCounts[a]||0)+1;
+    if(!a) { noArtistSongs.push(s); return; }
+    if(!majorSet.has(a)) nonMajorCounts[a] = (nonMajorCounts[a]||0)+1;
   });
 
   var midGroups = []; // 3-9首：保留獨立標題
@@ -1933,6 +2099,15 @@ function exportAudienceHtml(returnOnly){
     out += '</div></div>';
     return out;
   }
+
+  // 無歌手名按語言加入 small 桶
+  noArtistSongs.forEach(function(s){
+    var rawLang = s.lang||'';
+    if(rawLang==='英文') smallEN.push(s);
+    else if(rawLang==='日文') smallJA.push(s);
+    else if(rawLang==='韩文'||rawLang==='韩语') smallKO.push(s);
+    else smallCJK.push(s);
+  });
 
   // More... 大標題下三段合併
   if(smallCJK.length > 0 || smallEN.length > 0 || smallJA.length > 0 || smallKO.length > 0){
@@ -2581,7 +2756,7 @@ function toggleCustomName(btn){
 // ══ INIT ══
 const sAudName=document.getElementById('s-aud-name');
 const sDesc=document.getElementById('s-desc');
-var currentName=settings.audName||settings.bookName||settings.name||'王奕为';
+var currentName=settings.audName||settings.bookName||settings.name||'猫欢喜';
 saveSetting('audName',currentName); saveSetting('bookName',currentName);
 var presetBtns=document.querySelectorAll('.name-preset-btn:not(.name-custom-btn)');
 var matched=false;
@@ -2624,7 +2799,7 @@ document.addEventListener('click', function(e){
 });
 
 function exportLongImage(){
-  var name = settings.audName || settings.name || '线上版';
+  var name = settings.audName || settings.name || '猫欢喜';
   var stamp = new Date().toISOString().slice(0,10).replace(/-/g,'.');
   var filename = name+'_歌單_'+stamp+'.png';
   var groups = groupByArtist([].concat(songs));
@@ -2696,7 +2871,7 @@ var _nt0=document.getElementById('nav-total'); if(_nt0) _nt0.textContent='共 '+
 var _eb=document.getElementById('btn-export-html'); if(_eb) _eb.textContent='匯出目前歌单备份（'+songs.length+'首）';
 
 function exportPlainText(){
-  var name = settings.audName || settings.name || '线上版';
+  var name = settings.audName || settings.name || '猫欢喜';
   var stamp = new Date().toISOString().slice(0,10).replace(/-/g,'.');
   var filename = name+'_歌單_'+stamp+'.pdf';
   var groups = groupByArtist([].concat(songs));
@@ -2774,7 +2949,7 @@ function switchNewTab(name) {
     p.classList.toggle('active', p.id === 'new-page-' + name);
   });
   if (name === 'browse') {
-    renderBrowse();
+    renderBrowseAll();
   }
   if (name === 'add') updateNewCounts();
   if (name === 'export') updateExportCount();
@@ -2833,6 +3008,32 @@ function showNewSuggest(val) {
     return '<div class="new-suggest-item" onclick="selectNewArtist(\'' + safe + '\')">' + a + '</div>';
   }).join('');
   list.classList.add('active');
+}
+
+function onNewArtistKeydown(e) {
+  var list = document.getElementById('new-suggest-list');
+  if (!list.classList.contains('active')) return;
+  var items = list.querySelectorAll('.new-suggest-item');
+  if (!items.length) return;
+  var cur = list.querySelector('.new-suggest-item.focused');
+  var idx = -1;
+  items.forEach(function(it, i){ if(it === cur) idx = i; });
+  if (e.key === 'ArrowDown') {
+    e.preventDefault();
+    if (cur) cur.classList.remove('focused');
+    var next = items[idx + 1 < items.length ? idx + 1 : 0];
+    next.classList.add('focused'); next.scrollIntoView({block:'nearest'});
+  } else if (e.key === 'ArrowUp') {
+    e.preventDefault();
+    if (cur) cur.classList.remove('focused');
+    var prev = items[idx - 1 >= 0 ? idx - 1 : items.length - 1];
+    prev.classList.add('focused'); prev.scrollIntoView({block:'nearest'});
+  } else if (e.key === 'Enter') {
+    if (cur) { e.preventDefault(); cur.click(); }
+  } else if (e.key === 'Escape') {
+    list.classList.remove('active');
+    items.forEach(function(it){ it.classList.remove('focused'); });
+  }
 }
 
 function selectNewArtist(name) {
@@ -2906,6 +3107,9 @@ function addNewSong() {
   document.getElementById('new-star-btn').classList.remove('active');
 
   showPill('g-pill', '已新增：' + title, true);
+  // 重置歌單快取，下次切換時重新渲染
+  var bl = document.getElementById('browse-list');
+  if (bl) bl.innerHTML = '';
   setTimeout(pushToGitHub, 500);
 }
 
@@ -2938,9 +3142,17 @@ function toggleBrowseStar(el) {
 function handleBrowseSearch(val) {
   browseSearchQ = val.trim();
   browseIsSearching = !!browseSearchQ;
-  document.getElementById('new-browse-x').style.display = browseSearchQ ? 'block' : 'none';
-  document.getElementById('browse-hint').textContent = browseIsSearching ? '点击歌名可编辑' : '双击歌名可编辑';
-  renderBrowse();
+  var xBtn = document.getElementById('new-browse-x');
+  if (xBtn) xBtn.style.display = browseSearchQ ? 'block' : 'none';
+  var hint = document.getElementById('browse-hint');
+  if (hint) hint.textContent = browseIsSearching ? '点击歌名可编辑' : '双击歌名可编辑';
+  var dInput = document.getElementById('new-browse-search-d');
+  if (dInput && dInput.value !== val) dInput.value = val;
+  var mInput = document.getElementById('new-browse-search');
+  if (mInput && mInput.value !== val) mInput.value = val;
+  var xBtn = document.getElementById('bsb-search-x');
+  if (xBtn) xBtn.style.display = browseSearchQ ? 'block' : 'none';
+  renderBrowseAll();
 }
 
 function clearBrowseSearch() {
@@ -2996,6 +3208,260 @@ function renderBrowseSmall(arr, isSearching) {
   return out;
 }
 
+function renderBrowseAll() {
+  if (window.innerWidth >= 768) {
+    renderBrowseDesktop();
+  } else {
+    renderBrowse();
+  }
+}
+
+function setBrowseFilterD(el, type, val) {
+  if (type === 'lang') {
+    browseFilterLang = val;
+    var row = document.getElementById('browse-lang-row-d');
+    if (row) row.querySelectorAll('.bsb-tag').forEach(function(t){ t.classList.remove('active'); });
+  } else if (type === 'genre') {
+    browseFilterGenre = val;
+    var row = document.getElementById('browse-genre-row-d');
+    if (row) row.querySelectorAll('.bsb-tag').forEach(function(t){ t.classList.remove('active'); });
+  }
+  el.classList.add('active');
+  bsbArtistFilter = '';
+  renderBrowseDesktop();
+}
+
+var bsbArtistFilter = '';
+var bsbMoreOpen = false;
+
+function renderBrowseDesktop() {
+  var q = t2s(browseSearchQ.toLowerCase());
+  var filtered = songs.filter(function(s) {
+    if (browseFilterLang && (s.lang||'') !== browseFilterLang) return false;
+    if (browseFilterGenre && (s.genre||'') !== browseFilterGenre) return false;
+    if (browseFilterStar && !s.rec) return false;
+    if (q) {
+      var title = t2s((s.title||'').toLowerCase());
+      var artist = t2s((s.artist||'').toLowerCase());
+      if (!title.includes(q) && !artist.includes(q)) return false;
+    }
+    return true;
+  });
+
+  var artistCounts = {};
+  filtered.forEach(function(s){ var a=s.artist||''; if(a) artistCounts[a]=(artistCounts[a]||0)+1; });
+  var majorOrder = ['周杰伦','陈奕迅','方大同','林俊杰','陶喆','王力宏','林宥嘉','孙燕姿','张学友','张杰','毛不易','周兴哲','五月天'];
+
+  var mainGroups = {}, otherSongs = [];
+  filtered.forEach(function(s) {
+    var a = s.artist||'';
+    if (a && artistCounts[a] >= 3) {
+      if (!mainGroups[a]) mainGroups[a] = [];
+      mainGroups[a].push(s);
+    } else {
+      otherSongs.push(s);
+    }
+  });
+
+  var keys = Object.keys(mainGroups);
+  keys.sort(function(a, b) {
+    var ia=majorOrder.indexOf(a), ib=majorOrder.indexOf(b);
+    if(ia!==-1&&ib!==-1) return ia-ib;
+    if(ia!==-1) return -1; if(ib!==-1) return 1;
+    return (artistCounts[b]||0)-(artistCounts[a]||0);
+  });
+
+  // ── 左側邊欄 ──
+  var artistListEl = document.getElementById('bsb-artist-list');
+  if (artistListEl) {
+    var sbHtml = '';
+    keys.forEach(function(a) {
+      var active = bsbArtistFilter === a ? ' active' : '';
+      sbHtml += '<div class="bsb-artist-item'+active+'" data-artist="'+esc(a)+'" onclick="bsbSetArtistEl(this)">'
+        + '<span>'+esc(a)+'</span><span class="bsb-artist-count">'+mainGroups[a].length+'</span></div>';
+    });
+    if (otherSongs.length > 0) {
+      sbHtml += '<div class="bsb-more-toggle" onclick="bsbToggleMore(this)">▸ And more... ('+otherSongs.length+')</div>';
+      var moreArtists = {};
+      otherSongs.forEach(function(s){ var a=s.artist||''; if(a){ if(!moreArtists[a]) moreArtists[a]=[]; moreArtists[a].push(s); } });
+      var moreKeys = Object.keys(moreArtists).sort(function(a,b){ return moreArtists[b].length-moreArtists[a].length; });
+      sbHtml += '<div class="bsb-more-sub'+(bsbMoreOpen?' open':'')+'" id="bsb-more-sub">';
+      moreKeys.forEach(function(a) {
+        var active2 = bsbArtistFilter === a ? ' active' : '';
+        sbHtml += '<div class="bsb-artist-item'+active2+'" style="font-size:12px;padding:5px 8px;" data-artist="'+esc(a)+'" onclick="bsbSetArtistEl(this)">'
+          + '<span>'+esc(a)+'</span><span class="bsb-artist-count">'+moreArtists[a].length+'</span></div>';
+      });
+      sbHtml += '</div>';
+    }
+    artistListEl.innerHTML = sbHtml;
+  }
+
+  // ── 右側主內容 ──
+  var mainEl = document.getElementById('browse-list-d');
+  var countEl = document.getElementById('browse-count-bar-d');
+  if (!mainEl) return;
+
+  // 歌手篩選
+  var displayKeys = keys, displayOther = otherSongs;
+  if (bsbArtistFilter && bsbArtistFilter !== '__other__') {
+    displayKeys = mainGroups[bsbArtistFilter] ? [bsbArtistFilter] : [];
+    displayOther = [];
+  } else if (bsbArtistFilter === '__other__') {
+    displayKeys = []; displayOther = otherSongs;
+  }
+
+  function sortSongs(arr) {
+    return arr.slice().sort(function(a,b){
+      var aL=/^[A-Za-z0-9]/.test(a.title), bL=/^[A-Za-z0-9]/.test(b.title);
+      if(aL&&!bL) return -1; if(!aL&&bL) return 1;
+      if(aL&&bL) return a.title.toLowerCase().localeCompare(b.title.toLowerCase());
+      return a.title.length - b.title.length;
+    });
+  }
+
+  function renderFlow(songList) {
+    var sorted = sortSongs(songList);
+    return sorted.map(function(s, i) {
+      return '<span class="bsb-song-item" data-id="'+s.id+'">'+esc(s.title)+'</span>'
+        + (i < sorted.length-1 ? '<span class="bsb-sep"> · </span>' : '');
+    }).join('');
+  }
+
+  var html = '';
+  var total = 0;
+
+  displayKeys.forEach(function(a) {
+    var as = mainGroups[a];
+    if (!as || !as.length) return;
+    total += as.length;
+    html += '<div class="bsb-artist-block">'
+      + '<div class="bsb-artist-header">'
+      + '<span class="bsb-artist-name">'+esc(a)+'</span>'
+      + '<span class="bsb-artist-cnt">'+as.length+' 首</span>'
+      + '</div>'
+      + '<div class="bsb-songs-flow">'+renderFlow(as)+'</div>'
+      + '</div>';
+  });
+
+  // ── And more... 按原有邏輯分區 ──
+  if (displayOther.length > 0) {
+    total += displayOther.length;
+
+    // 按歌手分組，無歌手按語言分
+    var otherArtists = {}, otherOrder = [];
+    var noArtistCjk = [], noArtistEn = [], noArtistJa = [], noArtistKo = [];
+    displayOther.forEach(function(s) {
+      var a = s.artist||'';
+      if (!a) {
+        var l = s.lang||'';
+        if (l==='英文') noArtistEn.push(s);
+        else if (l==='日文') noArtistJa.push(s);
+        else if (l==='韩文') noArtistKo.push(s);
+        else noArtistCjk.push(s);
+      } else {
+        if (!otherArtists[a]) { otherArtists[a]=[]; otherOrder.push(a); }
+        otherArtists[a].push(s);
+      }
+    });
+    otherOrder.sort(function(a,b){ return otherArtists[b].length-otherArtists[a].length; });
+
+    var cjkArtists=[], enArtists=[], jaArtists=[], koArtists=[];
+    otherOrder.forEach(function(a) {
+      var ss = otherArtists[a];
+      var hasCjk = ss.some(function(s){ var l=s.lang||''; return l!=='英文'&&l!=='日文'&&l!=='韩文'; });
+      var hasJa  = ss.some(function(s){ var l=s.lang||''; return l==='日文'; });
+      var hasKo  = ss.some(function(s){ var l=s.lang||''; return l==='韩文'; });
+      if(hasCjk) cjkArtists.push(a);
+      else if(hasJa) jaArtists.push(a);
+      else if(hasKo) koArtists.push(a);
+      else enArtists.push(a);
+    });
+
+    function renderArtistGroup(artistList) {
+      var out = '';
+      artistList.forEach(function(a) {
+        var ss = sortSongs(otherArtists[a]);
+        ss.forEach(function(s,i){
+          out += '<span class="bsb-song-item" data-id="'+s.id+'">'+esc(s.title)+'</span>';
+          if(i < ss.length-1) out += '<span class="bsb-sep"> · </span>';
+        });
+        out += '<span class="bsb-sep"> · </span>';
+      });
+      if(out.endsWith('<span class="bsb-sep"> · </span>'))
+        out = out.slice(0, out.lastIndexOf('<span class="bsb-sep"> · </span>'));
+      return out ? '<div class="bsb-songs-flow">'+out+'</div>' : '';
+    }
+
+    function renderNoArtist(songList) {
+      if(!songList.length) return '';
+      var sorted = sortSongs(songList);
+      var out = sorted.map(function(s,i){
+        return '<span class="bsb-song-item" data-id="'+s.id+'">'+esc(s.title)+'</span>'
+          + (i<sorted.length-1?'<span class="bsb-sep"> · </span>':'');
+      }).join('');
+      return '<div class="bsb-songs-flow">'+out+'</div>';
+    }
+
+    var cjkHtml = renderArtistGroup(cjkArtists) + renderNoArtist(noArtistCjk);
+    var enHtml  = renderArtistGroup(enArtists)  + renderNoArtist(noArtistEn);
+    var jaHtml  = renderArtistGroup(jaArtists)  + renderNoArtist(noArtistJa);
+    var koHtml  = renderArtistGroup(koArtists)  + renderNoArtist(noArtistKo);
+
+    html += '<div class="bsb-artist-block bsb-more-block">'
+      + '<div class="bsb-artist-header bsb-more-hdr">'
+      + '<span class="bsb-artist-name">And more...</span>'
+      + '<span class="bsb-artist-cnt">'+displayOther.length+' 首 ▸</span>'
+      + '</div>'
+      + '<div class="bsb-more-content open">';
+    if(cjkHtml) html += cjkHtml;
+    if(enHtml)  html += '<div style="margin-top:8px;padding-top:8px;border-top:1px solid rgba(200,160,80,.1)">'+enHtml+'</div>';
+    if(jaHtml)  html += '<div style="margin-top:8px;padding-top:8px;border-top:1px solid rgba(200,160,80,.1)">'+jaHtml+'</div>';
+    if(koHtml)  html += '<div style="margin-top:8px;padding-top:8px;border-top:1px solid rgba(200,160,80,.1)">'+koHtml+'</div>';
+    html += '</div></div>';
+  }
+
+  mainEl.innerHTML = html;
+  if (countEl) countEl.textContent = '共 ' + total + ' 首';
+
+  // 點擊展開編輯（單擊或雙擊）
+  mainEl.querySelectorAll('.bsb-song-item').forEach(function(el) {
+    el.addEventListener('click', function() { openEditModal(parseInt(this.dataset.id)); });
+    el.addEventListener('dblclick', function(e) { e.stopPropagation(); openEditModal(parseInt(this.dataset.id)); });
+  });
+
+  // And more... 展開
+  var moreHdr = mainEl.querySelector('.bsb-more-hdr');
+  if(moreHdr) {
+    moreHdr.addEventListener('click', function(){
+      this.nextElementSibling.classList.toggle('open');
+    });
+  }
+}
+
+
+function clearBrowseSearchD() {
+  browseSearchQ = '';
+  browseIsSearching = false;
+  var d = document.getElementById('new-browse-search-d');
+  if (d) d.value = '';
+  var m = document.getElementById('new-browse-search');
+  if (m) m.value = '';
+  var x = document.getElementById('bsb-search-x');
+  if (x) x.style.display = 'none';
+  renderBrowseDesktop();
+}
+function bsbSetArtist(name) { bsbArtistFilter = name; renderBrowseDesktop(); }
+function bsbSetArtistEl(el) {
+  var name = el.getAttribute('data-artist') || '';
+  bsbArtistFilter = name;
+  renderBrowseDesktop();
+}
+function bsbToggleMore(el) {
+  bsbMoreOpen = !bsbMoreOpen;
+  var sub = document.getElementById('bsb-more-sub');
+  if (sub) sub.classList.toggle('open', bsbMoreOpen);
+}
+
 function renderBrowse() {
   var container = document.getElementById('browse-list');
   var countBar = document.getElementById('browse-count-bar');
@@ -3023,9 +3489,13 @@ function renderBrowse() {
   });
 
   // 按歌手分組（3首以上立標題，其餘 And more...）
+  // artistCounts 基於篩選後的歌曲，確保分組正確
   var artistCounts = {};
-  songs.forEach(function(s) { var a = s.artist||''; if(a) artistCounts[a] = (artistCounts[a]||0)+1; });
-  var majorOrder = ['周杰伦','陈奕迅','方大同','林俊杰','陶喆','王力宏','林宥嘉','孙燕姿','张学友','张杰','毛不易','周兴哲','五月天','韦礼安'];
+  filtered.forEach(function(s) { var a = s.artist||''; if(a) artistCounts[a] = (artistCounts[a]||0)+1; });
+  // DEBUG
+  var dbgEl = document.getElementById('browse-debug');
+
+  var majorOrder = ['周杰伦','陈奕迅','方大同','林俊杰','陶喆','王力宏','林宥嘉','孙燕姿','张学友','张杰','毛不易','周兴哲','五月天'];
 
   var groups = {};
   filtered.forEach(function(s) {
@@ -3046,6 +3516,8 @@ function renderBrowse() {
   });
   if (groups['__other__']) keys.push('__other__');
 
+
+
   var total = filtered.length;
   var html = '';
   var cls = 'browse-si' + (browseIsSearching ? ' clickable' : '');
@@ -3055,23 +3527,87 @@ function renderBrowse() {
     if (!as || !as.length) return;
 
     if (key === '__other__') {
-      var cjk = [], en = [], ja = [];
+      // 先按歌手分組（歌手欄空白的按語言各自處理）
+      var otherArtists = {}, otherOrder = [];
+      var noArtistCjk = [], noArtistEn = [], noArtistJa = [];
+
       as.forEach(function(s) {
-        var l = s.lang || '';
-        if (l === '英文') en.push(s);
-        else if (l === '日文' || l === '韩文') ja.push(s);
-        else cjk.push(s);
+        var a = s.artist || '';
+        if (!a) {
+          // 歌手欄空白：按語言分到對應區
+          var l = s.lang || '';
+          if (l === '英文') noArtistEn.push(s);
+          else if (l === '日文' || l === '韩文') noArtistJa.push(s);
+          else noArtistCjk.push(s);
+        } else {
+          if (!otherArtists[a]) { otherArtists[a] = []; otherOrder.push(a); }
+          otherArtists[a].push(s);
+        }
       });
+
+      // 有歌手名的：按曲數多到少排序，再按語言分區
+      otherOrder.sort(function(a,b){ return otherArtists[b].length - otherArtists[a].length; });
+
+      var cjkArtists = [], enArtists = [], jaArtists = [];
+      otherOrder.forEach(function(a) {
+        var ss = otherArtists[a];
+        var hasCjk = ss.some(function(s){ var l=s.lang||''; return l!=='英文'&&l!=='日文'&&l!=='韩文'; });
+        var hasJa = ss.some(function(s){ var l=s.lang||''; return l==='日文'||l==='韩文'; });
+        if (hasCjk) cjkArtists.push(a);
+        else if (hasJa) jaArtists.push(a);
+        else enArtists.push(a);
+      });
+
+      function renderSongList(songList) {
+        var out = '';
+        songList.sort(function(x,y){
+          var xL=/^[A-Za-z0-9]/.test(x.title), yL=/^[A-Za-z0-9]/.test(y.title);
+          if(xL&&!yL) return -1; if(!xL&&yL) return 1;
+          return x.title.length - y.title.length;
+        });
+        var cls = 'browse-si' + (browseIsSearching ? ' clickable' : '');
+        songList.forEach(function(s,i){
+          out += '<span class="' + cls + '" data-id="' + s.id + '">' + esc(s.title) + '</span>';
+          if(i < songList.length-1) out += '<span class="browse-sep"> / </span>';
+        });
+        return out ? '<div style="font-size:var(--browse-fs);color:#a89880;line-height:2.2;">' + out + '</div>' : '';
+      }
+
+      function renderArtistGroup(artistList) {
+        var out = '';
+        artistList.forEach(function(a) {
+          var ss = otherArtists[a];
+          ss.sort(function(x,y){
+            var xL=/^[A-Za-z0-9]/.test(x.title), yL=/^[A-Za-z0-9]/.test(y.title);
+            if(xL&&!yL) return -1; if(!xL&&yL) return 1;
+            return x.title.length - y.title.length;
+          });
+          var cls = 'browse-si' + (browseIsSearching ? ' clickable' : '');
+          ss.forEach(function(s,i){
+            out += '<span class="' + cls + '" data-id="' + s.id + '">' + esc(s.title) + '</span>';
+            if(i < ss.length-1) out += '<span class="browse-sep"> / </span>';
+          });
+          out += '<span class="browse-sep"> / </span>';
+        });
+        if (out.endsWith('<span class="browse-sep"> / </span>')) {
+          out = out.slice(0, out.lastIndexOf('<span class="browse-sep"> / </span>'));
+        }
+        return out ? '<div style="font-size:var(--browse-fs);color:#a89880;line-height:2.2;">' + out + '</div>' : '';
+      }
+
       html += '<div class="browse-artist-block">';
       html += '<div class="browse-artist-header">';
       html += '<span class="browse-artist-name">And more...</span>';
       html += '<span class="browse-artist-count">' + as.length + ' 首</span>';
       html += '</div>';
-      html += renderBrowseSmall(cjk, browseIsSearching);
-      if (en.length) html += '<div style="margin-top:6px;padding-top:6px;border-top:0.5px solid rgba(200,160,80,.1)">' + renderBrowseSmall(en, browseIsSearching) + '</div>';
-      if (ja.length) html += '<div style="margin-top:6px;padding-top:6px;border-top:0.5px solid rgba(200,160,80,.1)">' + renderBrowseSmall(ja, browseIsSearching) + '</div>';
+      var cjkHtml = renderArtistGroup(cjkArtists) + renderSongList(noArtistCjk);
+      var enHtml = renderArtistGroup(enArtists) + renderSongList(noArtistEn);
+      var jaHtml = renderArtistGroup(jaArtists) + renderSongList(noArtistJa);
+      if (cjkHtml) html += cjkHtml;
+      if (enHtml) html += '<div style="margin-top:6px;padding-top:6px;border-top:0.5px solid rgba(200,160,80,.1)">' + enHtml + '</div>';
+      if (jaHtml) html += '<div style="margin-top:6px;padding-top:6px;border-top:0.5px solid rgba(200,160,80,.1)">' + jaHtml + '</div>';
       html += '</div>';
-    } else {
+} else {
       // 英文先（字數少到多），再中文（字數少到多）
       as.sort(function(a,b){
         var aEn = /^[A-Za-z0-9]/.test(a.title);
@@ -3094,6 +3630,8 @@ function renderBrowse() {
   });
 
   container.innerHTML = html;
+
+
 
   if (countBar) {
     countBar.textContent = (q || browseFilterLang || browseFilterGenre || browseFilterStar)
@@ -3185,6 +3723,8 @@ function saveFromModal() {
   closeModal2();
   renderBrowse();
   showPill('g-pill', '已保存', true);
+  var bl2 = document.getElementById('browse-list');
+  if (bl2) bl2.innerHTML = '';
   setTimeout(pushToGitHub, 500);
 }
 
@@ -3261,7 +3801,7 @@ function initNewManage() {
   var genreRow = document.getElementById('browse-genre-row');
   if (genreRow) { genreRow.querySelectorAll('.nftag').forEach(function(t,i){ t.classList.toggle('active', i===0); }); }
   // 直接同步渲染歌單
-  renderBrowse();
+  renderBrowseAll();
   // 根據 settings 設定歌手名按鈕
   var name = settings.name || '猫欢喜';
   document.querySelectorAll('.name-preset-btn').forEach(function(btn) {
