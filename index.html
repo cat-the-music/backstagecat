@@ -2279,7 +2279,8 @@ function exportAudienceHtml(returnOnly){
     +'.si{display:inline;white-space:nowrap;}'
     +'.si::after{content:" / ";color:rgba(200,160,80,.5);white-space:normal;}'
     +'.si.lv::after{content:""}'
-    +'.sep{display:none;}';
+    +'.sep{display:none;}'
+    +'@media(min-width:768px){body{max-width:950px;margin:0 auto;}.top-bar{padding-top:16px;}.an{font-size:1.1rem;}.page-title{font-size:1.15rem;color:#e0b860;}.count{font-size:.78rem;}.fs-btn{font-size:.75rem;}.ftag{font-size:.82rem;padding:4px 13px;}}';
 
   // ── Script ──
   var _majorArtists = JSON.stringify(majorArtists);
@@ -2411,7 +2412,7 @@ function exportAudienceHtml(returnOnly){
     '    apply();',
     '  });',
     '});',
-    'var fsSizes=["0.68rem","0.78rem","0.9rem"];',
+    'var isMobile=window.innerWidth<768;fsSizes=isMobile?["0.68rem","0.78rem","0.9rem"]:["0.84rem","0.94rem","1.04rem"];',
     'function applyFs(idx){',
     '  document.documentElement.style.setProperty("--fs",fsSizes[idx]);',
     '  Array.from(document.querySelectorAll(".fs-btn")).forEach(function(b){b.classList.toggle("active",parseInt(b.dataset.fs)===idx);});',
