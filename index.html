@@ -842,7 +842,8 @@ body { background: #000000 !important; display: flex; flex-direction: column; ov
     <h3>🔑 初次设定</h3>
     <p>请输入同步密钥以启用自动更新功能。每台设备只需输入一次。</p>
     <input type="password" id="token-input" placeholder="输入同步密钥…">
-    <button onclick="saveTokenBack()">确认</button>
+    <div id="token-error" style="display:none;color:#c87e7e;font-size:12px;margin-top:6px;"></div>
+    <button id="token-confirm-btn" onclick="saveTokenBack()">确认</button>
   </div>
 </div>
 <div id="ptr-indicator">↓ 放開以更新</div>
@@ -921,6 +922,9 @@ body { background: #000000 !important; display: flex; flex-direction: column; ov
   </div>
 
   <div id="recent-songs-bar" style="margin-top:18px;padding:0 2px;font-size:.8rem;color:#c8b090;line-height:2;"></div>
+  <div style="margin-top:24px;text-align:center;">
+    <button onclick="resetToken()" style="background:none;border:1px solid rgba(200,160,80,.2);color:#9a8060;font-size:12px;padding:6px 16px;border-radius:8px;cursor:pointer;font-family:inherit;">🔑 重設同步密鑰</button>
+  </div>
 </div>
 
 <!-- 分頁二：歌曲清單 -->
@@ -3562,6 +3566,16 @@ function clearBrowseSearchD() {
   if (x) x.style.display = 'none';
   renderBrowseDesktop();
 }
+function resetToken() {
+  localStorage.removeItem('gh_token_back');
+  var overlay = document.getElementById('token-overlay');
+  var input = document.getElementById('token-input');
+  var errEl = document.getElementById('token-error');
+  if (input) input.value = '';
+  if (errEl) errEl.style.display = 'none';
+  if (overlay) overlay.classList.add('active');
+}
+
 function bsbSetArtist(name) { bsbArtistFilter = name; renderBrowseDesktop(); }
 
 // ═══ 匯出子標籤 & 紀錄 ═══
@@ -4185,7 +4199,21 @@ function syncAndPush(operation, operationData, onComplete) {
           localStorage.removeItem('_shaData');
           setTimeout(doSync, 2000);
         } else {
-          showPill('g-pill', '同步失败，请检查网络', false);
+          // 確認失敗原因
+          var failedResult = !results[0].ok ? results[0] : results[1];
+          if (failedResult.status === 401) {
+            localStorage.removeItem('gh_token_back');
+            document.getElementById('token-overlay').classList.add('active');
+            showPill('g-pill', 'token 錯誤，請重新設定', false);
+          } else if (failedResult.status === 403) {
+            showPill('g-pill', '沒有權限（403），請確認 token', false);
+          } else if (failedResult.status === 409) {
+            showPill('g-pill', '版本衝突（409），請稍後重試', false);
+          } else if (failedResult.status === 422) {
+            showPill('g-pill', 'SHA 錯誤（422），請重試', false);
+          } else {
+            showPill('g-pill', '同步失败（' + failedResult.status + '），请检查网络', false);
+          }
         }
       })
       .catch(function(e) {
@@ -4219,9 +4247,33 @@ function checkToken() {
 function saveTokenBack() {
   var val = document.getElementById('token-input').value.trim();
   if (!val) return;
-  localStorage.setItem('gh_token_back', val);
-  document.getElementById('token-overlay').classList.remove('active');
-  showPill('g-pill', '设定完成 ✓', true);
+  var errEl = document.getElementById('token-error');
+  var btn = document.getElementById('token-confirm-btn');
+  btn.disabled = true;
+  btn.textContent = '验证中…';
+  if (errEl) errEl.style.display = 'none';
+  var testToken = GITHUB_TOKEN_FRONT + val;
+  fetch('https://api.github.com/repos/' + GITHUB_USER + '/' + GITHUB_REPO, {
+    headers: { 'Authorization': 'token ' + testToken, 'Accept': 'application/vnd.github.v3+json' }
+  }).then(function(r) {
+    btn.disabled = false;
+    btn.textContent = '确认';
+    if (r.ok) {
+      localStorage.setItem('gh_token_back', val);
+      document.getElementById('token-overlay').classList.remove('active');
+      showPill('g-pill', '设定完成 ✓', true);
+    } else if (r.status === 401) {
+      if (errEl) { errEl.textContent = 'token 錯誤，請重新輸入'; errEl.style.display = 'block'; }
+    } else if (r.status === 403) {
+      if (errEl) { errEl.textContent = '沒有權限，請確認 token 設定'; errEl.style.display = 'block'; }
+    } else {
+      if (errEl) { errEl.textContent = '驗證失敗（' + r.status + '），請重試'; errEl.style.display = 'block'; }
+    }
+  }).catch(function() {
+    btn.disabled = false;
+    btn.textContent = '确认';
+    if (errEl) { errEl.textContent = '無法連線，請檢查網路'; errEl.style.display = 'block'; }
+  });
 }
 
 // ═══ 字體大小控制 ═══
