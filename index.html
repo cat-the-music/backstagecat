@@ -3367,7 +3367,7 @@ function renderBrowseDesktop() {
 
   var artistCounts = {};
   filtered.forEach(function(s){ var a=s.artist||''; if(a) artistCounts[a]=(artistCounts[a]||0)+1; });
-  var majorOrder = ['周杰伦','陈奕迅','方大同','林俊杰','陶喆','王力宏','林宥嘉','孙燕姿','张学友','张杰','毛不易','周兴哲','五月天'];
+  var majorOrder = [];
 
   var mainGroups = {}, otherSongs = [];
   filtered.forEach(function(s) {
@@ -3659,7 +3659,7 @@ function _makeLogEntry(action, song, oldSong) {
   return entries;
 }
 
-var _pendingLogEntries = [{"time":"26/05/29 19:25","action":"编辑","artist":"李笛","title":"你不要担心","detail":"歌手: —→李笛"},{"time":"26/05/30 06:13","action":"编辑","artist":"李笛","title":"你不要担心","detail":"歌手: —→李笛"},{"time":"26/05/30 06:23","action":"编辑","artist":"李笛","title":"你不要担心","detail":"歌手: —→李笛"},{"time":"26/05/30 06:24","action":"编辑","artist":"李笛","title":"你不要担心","detail":"歌手: —→李笛"},{"time":"26/05/30 06:27","action":"编辑","artist":"李笛","title":"你不要担心","detail":"歌手: —→李笛"},{"time":"26/05/30 06:38","action":"编辑","artist":"森山直太朗","title":"夏日终章（夏の终わり）","detail":"歌手: —→森山直太朗"},{"time":"26/05/30 06:42","action":"编辑","artist":"宋冬野","title":"董小姐","detail":"歌手: —→宋冬野"},{"time":"26/05/30 06:42","action":"编辑","artist":"宋冬野","title":"董小姐","detail":"曲风: 流行 Pop→民谣 Folk"},{"time":"26/05/30 08:47","action":"编辑","artist":"Spiritualized","title":"Lay It Down Slow","detail":"歌手: —→Spiritualized"},{"time":"26/05/30 08:47","action":"编辑","artist":"Spiritualized","title":"Lay It Down Slow","detail":"曲风: 流行 Pop→抒情 Ballad"},{"time":"26/05/30 18:18","action":"编辑","artist":"Spiritualized","title":"Lay It Down Slow","detail":"歌手: —→Spiritualized"},{"time":"26/05/30 18:18","action":"编辑","artist":"Spiritualized","title":"Lay It Down Slow","detail":"曲风: 流行 Pop→抒情 Ballad"},{"time":"26/05/30 18:20","action":"编辑","artist":"Pharrell Williams","title":"Happy","detail":"歌手: —→Pharrell Williams"},{"time":"26/05/30 18:23","action":"编辑","artist":"莫西子诗","title":"要死就一定要死在你手里","detail":"歌手: —→莫西子诗"},{"time":"26/05/30 18:23","action":"编辑","artist":"莫西子诗","title":"要死就一定要死在你手里","detail":"曲风: 民謠 Folk→民谣 Folk"},{"time":"26/05/30 20:24","action":"编辑","artist":"白日密语","title":"Moonquake","detail":"歌名: Moon Quake→Moonquake"},{"time":"26/05/30 20:24","action":"编辑","artist":"白日密语","title":"Moonquake","detail":"歌手: —→白日密语"},{"time":"26/05/30 21:07","action":"编辑","artist":"ZAYN","title":"Fool for You","detail":"歌手: —→ZAYN"},{"time":"26/05/31 04:20","action":"编辑","artist":"Bonaparte","title":"Melody X","detail":"歌手: —→Bonaparte"},{"time":"26/05/31 04:24","action":"编辑","artist":"TEEKS","title":"Into You","detail":"歌手: —→TEEKS"}];
+var _pendingLogEntries = [];
 
 function _addToChangelog(entries) {
   if (!entries || !entries.length) return;
@@ -3709,7 +3709,7 @@ function renderBrowse() {
   // DEBUG
   var dbgEl = document.getElementById('browse-debug');
 
-  var majorOrder = ['周杰伦','陈奕迅','方大同','林俊杰','陶喆','王力宏','林宥嘉','孙燕姿','张学友','张杰','毛不易','周兴哲','五月天'];
+  var majorOrder = [];
 
   var groups = {};
   filtered.forEach(function(s) {
@@ -4095,7 +4095,25 @@ function _songsHash(arr) {
   return h.toString(36);
 }
 
+var _isSyncing = false;
+var _syncQueue = [];
+
+function _runNextSync() {
+  if (_syncQueue.length === 0) { _isSyncing = false; return; }
+  var next = _syncQueue.shift();
+  _isSyncing = false;
+  syncAndPush(next.operation, next.operationData, function() {
+    if (next.onComplete) next.onComplete();
+    _runNextSync();
+  });
+}
+
 function syncAndPush(operation, operationData, onComplete) {
+  if (_isSyncing) {
+    _syncQueue.push({ operation: operation, operationData: operationData, onComplete: onComplete });
+    return;
+  }
+  _isSyncing = true;
   var base = 'https://api.github.com/repos/' + GITHUB_USER + '/' + GITHUB_REPO + '/contents/';
   var headers = {
     'Authorization': 'token ' + getToken(),
@@ -4113,7 +4131,7 @@ function syncAndPush(operation, operationData, onComplete) {
       ? Promise.resolve(cachedHtml)
       : fetch(base + 'index.html', { headers: headers }).then(function(r){ return r.json(); }).then(function(d){ return d.sha || ''; });
 
-    var fetchData = fetch(base + 'data.json', { headers: headers }).then(function(r){ return r.ok ? r.json() : {}; });
+    var fetchData = fetch(base + 'data.json?t=' + Date.now(), { headers: headers }).then(function(r){ return r.ok ? r.json() : {}; });
 
     Promise.all([fetchIndexSha, fetchData])
       .then(function(res) {
@@ -4194,6 +4212,7 @@ function syncAndPush(operation, operationData, onComplete) {
           results[0].json().then(function(r){ if(r.content && r.content.sha) localStorage.setItem('_shaHtml', r.content.sha); });
           results[1].json().then(function(r){ if(r.content && r.content.sha) localStorage.setItem('_shaData', r.content.sha); });
           showPill('g-pill', '歌单已同步到线上 ✓', true);
+          _isSyncing = false; _runNextSync();
         } else if (!_retried) {
           _retried = true;
           localStorage.removeItem('_shaHtml');
@@ -4214,6 +4233,7 @@ function syncAndPush(operation, operationData, onComplete) {
             showPill('g-pill', 'SHA 錯誤（422），請重試', false);
           } else {
             showPill('g-pill', '同步失败（' + failedResult.status + '），请检查网络', false);
+            _isSyncing = false; _runNextSync();
           }
         }
       })
@@ -4226,6 +4246,7 @@ function syncAndPush(operation, operationData, onComplete) {
           setTimeout(doSync, 2000);
         } else {
           showPill('g-pill', '同步失败，请检查网络', false);
+          _isSyncing = false; _runNextSync();
         }
       });
   }
