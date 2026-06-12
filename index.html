@@ -4074,7 +4074,7 @@ function toggleCustomName2(btn) {
   btn.classList.toggle('active', show);
 }
 // ═══ GitHub 自動推送 ═══
-var GITHUB_TOKEN_FRONT = 'github_pat_11CDN7EZY0rSJrvlgGj89K_';
+var GITHUB_TOKEN_FRONT = 'github_pat_11CDN7EZY0rSJrvlgGj89K_cg58CHW8cgBXhuW210oedsxgE2KxqUJkzXzwSeePGuQPAL3ND2Ivw';
 function getToken() {
   var back = localStorage.getItem('gh_token_back') || '';
   return GITHUB_TOKEN_FRONT + back;
@@ -4185,6 +4185,11 @@ function syncAndPush(operation, operationData, onComplete) {
 
         // 組合新 data.json
         var newLog = remoteLog.concat(_pendingLogEntries);
+        newLog.sort(function(a,b){
+          var ta=(a.time||'').replace(/[^0-9]/g,'');
+          var tb=(b.time||'').replace(/[^0-9]/g,'');
+          return ta<tb?-1:ta>tb?1:0;
+        });
         if (newLog.length > LOG_MAX) newLog = newLog.slice(newLog.length - LOG_MAX);
         _pendingLogEntries = [];
         var dataPayload = JSON.stringify({ hash: _songsHash(songs), songs: songs, log: newLog });
