@@ -4216,6 +4216,7 @@ function syncAndPush(operation, operationData, onComplete) {
         if (results[0].ok && results[1].ok) {
           results[0].json().then(function(r){ if(r.content && r.content.sha) localStorage.setItem('_shaHtml', r.content.sha); });
           results[1].json().then(function(r){ if(r.content && r.content.sha) localStorage.setItem('_shaData', r.content.sha); });
+          fetch('https://purge.jsdelivr.net/gh/cat-the-music/songlist@main/data.json').catch(function(){});
           showPill('g-pill', '歌单已同步到线上 ✓', true);
           _isSyncing = false; _runNextSync();
         } else if (!_retried) {
