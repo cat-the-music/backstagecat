@@ -4116,7 +4116,7 @@ function syncAndPush(operation, operationData, onComplete) {
     return;
   }
   _isSyncing = true;
-  var base = 'https://api.github.com/repos/' + GITHUB_USER + '/' + GITHUB_REPO + '/contents/';
+  var base = 'http://140.83.34.235/ghapi/repos/' + GITHUB_USER + '/' + GITHUB_REPO + '/contents/';
   var headers = {
     'Authorization': 'token ' + getToken(),
     'Accept': 'application/vnd.github.v3+json',
@@ -4285,7 +4285,7 @@ function saveTokenBack() {
   btn.textContent = '验证中…';
   if (errEl) errEl.style.display = 'none';
   var testToken = GITHUB_TOKEN_FRONT + val;
-  fetch('https://api.github.com/repos/' + GITHUB_USER + '/' + GITHUB_REPO, {
+  fetch('http://140.83.34.235/ghapi/repos/' + GITHUB_USER + '/' + GITHUB_REPO, {
     headers: { 'Authorization': 'token ' + testToken, 'Accept': 'application/vnd.github.v3+json' }
   }).then(function(r) {
     btn.disabled = false;
