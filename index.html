@@ -841,7 +841,7 @@ body { background: #000000 !important; display: flex; flex-direction: column; ov
   <div class="token-box">
     <h3>🔑 初次设定</h3>
     <p>请输入同步密钥以启用自动更新功能。每台设备只需输入一次。</p>
-    <input type="password" id="token-input" placeholder="输入同步密钥…">
+    <input type="text" id="token-input" placeholder="输入同步密钥…" oninput="this.value=this.value.replace(/[\s\n\r]/g,'')">
     <div id="token-error" style="display:none;color:#c87e7e;font-size:12px;margin-top:6px;"></div>
     <button id="token-confirm-btn" onclick="saveTokenBack()">确认</button>
   </div>
