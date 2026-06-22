@@ -2945,7 +2945,7 @@ initNewManage();
 })();
 
 // ── 從 songlist 拉取最新歌單 ──
-var DATA_JSON_URL = 'http://140.83.34.235/ghapi/repos/cat-the-music/songlist/contents/data.json';
+var DATA_JSON_URL = 'http://140.83.34.235/songlist/data.json';
 var _syncTimer = null;
 var _lastPushTime = parseInt(localStorage.getItem('_lastPushTime') || '0');
 
@@ -2953,9 +2953,7 @@ function syncFromRemote(silent) {
   if (Date.now() - _lastPushTime < 30000) return;
   fetch(DATA_JSON_URL + '?t=' + Date.now())
     .then(function(r){ return r.ok ? r.json() : null; })
-    .then(function(apiData) {
-      if (!apiData || !apiData.content) return;
-      var data = JSON.parse(decodeURIComponent(escape(atob(apiData.content.replace(/\n/g, '')))));
+    .then(function(data) {
       if (!data || !data.songs) return;
       var remote = data.songs;
       var remoteHash = data.hash || null;
@@ -3608,11 +3606,7 @@ function switchExportSubtab(name) {
 function loadChangelog() {
   fetch(DATA_JSON_URL + '?t=' + Date.now())
     .then(function(r){ return r.ok ? r.json() : null; })
-    .then(function(apiData) {
-      var data = null;
-      if (apiData && apiData.content) {
-        data = JSON.parse(decodeURIComponent(escape(atob(apiData.content.replace(/\n/g, '')))));
-      }
+    .then(function(data) {
       _logData = (data && data.log) ? data.log : [];
       _logPage = 0;
       renderLogPage();
