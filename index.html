@@ -2280,7 +2280,11 @@ function exportAudienceHtml(returnOnly){
     +'.si::after{content:" / ";color:rgba(200,160,80,.5);white-space:normal;}'
     +'.si.lv::after{content:""}'
     +'.sep{display:none;}'
-    +'@media(min-width:768px){body{max-width:950px;margin:0 auto;}.top-bar{padding-top:16px;}.an{font-size:1.1rem;}.page-title{font-size:1.15rem;color:#e0b860;}.count{font-size:.78rem;}.fs-btn{font-size:.75rem;}.ftag{font-size:.82rem;padding:4px 13px;}}';
+    +'@media(min-width:768px){body{max-width:950px;margin:0 auto;}.top-bar{padding-top:16px;}.an{font-size:1.1rem;}.page-title{font-size:1.15rem;color:#e0b860;}.count{font-size:.78rem;}.fs-btn{font-size:.75rem;}.ftag{font-size:.82rem;padding:4px 13px;}}'
+    +'::-webkit-scrollbar{width:4px;}'
+    +'::-webkit-scrollbar-track{background:transparent;}'
+    +'::-webkit-scrollbar-thumb{background:rgba(200,160,80,.25);border-radius:2px;}'
+    +'::-webkit-scrollbar-thumb:hover{background:rgba(200,160,80,.45);}';
 
   // ── Script ──
   var _majorArtists = JSON.stringify(majorArtists);
@@ -2419,7 +2423,7 @@ function exportAudienceHtml(returnOnly){
     '  try{localStorage.setItem("s-fs",idx);}catch(e){}',
     '}',
     'Array.from(document.querySelectorAll(".fs-btn")).forEach(function(btn){btn.addEventListener("click",function(){applyFs(parseInt(btn.dataset.fs));});});',
-    'try{var sv=parseInt(localStorage.getItem("s-fs"));if(!isNaN(sv)&&sv>=0&&sv<=2){applyFs(sv);}else{applyFs(0);}}catch(e){applyFs(0);}',
+    'try{var sv=parseInt(localStorage.getItem("s-fs"));if(!isNaN(sv)&&sv>=0&&sv<=2){applyFs(sv);}else{applyFs(1);}}catch(e){applyFs(1);}',
     'updateStates();',
     '// Show other-headers initially',
     'Array.from(document.querySelectorAll(".other-header")).forEach(function(hdr){hdr.style.display="";});',
