@@ -1071,7 +1071,8 @@ body { background: #000000 !important; display: flex; flex-direction: column; ov
     <button class="new-backup-btn" id="new-backup-btn" style="margin-bottom:6px;" onclick="exportBackup()">↓ 导出歌曲备份（0 首）</button>
   </div>
 
-  <div style="text-align:right;margin-top:4px;">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-top:4px;">
+    <button onclick="pushToGitHub()" style="background:none;border:none;color:#9a8060;font-size:11px;font-family:inherit;cursor:pointer;padding:4px 0;">↑ 手动同步线上歌单</button>
     <button onclick="checkMissingData()" style="background:none;border:none;color:#9a8060;font-size:11px;font-family:inherit;cursor:pointer;padding:4px 0;">⚠ 检查缺漏资料</button>
   </div>
   </div><!-- /export-content -->
@@ -2250,9 +2251,9 @@ function exportAudienceHtml(returnOnly){
     +'.fs-btn{background:transparent;border:1px solid rgba(200,160,80,.25);color:var(--text3);border-radius:4px;padding:2px 7px;cursor:pointer;font-family:\'DM Mono\',monospace;font-size:.65rem;transition:all .15s;}'
     +'.fs-btn.active{background:rgba(200,160,80,.15);border-color:var(--gold);color:var(--gold);}'
     +'.search-wrap{position:relative;display:flex;align-items:center;gap:6px;}'
-    +'.search-wrap input{flex:1;min-width:0;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:20px;color:var(--text);font-family:\'Noto Serif SC\',serif;font-size:.82rem;padding:7px 14px 7px 34px;outline:none;transition:border-color .2s;}'
-    +'.search-wrap input:focus{border-color:rgba(200,160,80,.5);}'
-    +'.search-wrap input::placeholder{color:var(--text3);}'
+    +'.search-wrap input{flex:1;min-width:0;background:rgba(255,255,255,.06);border:1px solid rgba(200,160,80,.4);border-radius:20px;color:var(--text);font-family:\'Noto Serif SC\',serif;font-size:.82rem;padding:7px 14px 7px 34px;outline:none;transition:border-color .2s;}'
+    +'.search-wrap input:focus{border-color:rgba(200,160,80,.8);}'
+    +'.search-wrap input::placeholder{color:rgba(200,160,80,.55);}'
     +'.search-icon{position:absolute;left:12px;opacity:.4;pointer-events:none;font-size:.8rem;}'
     +'.clear-btn{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);color:var(--text3);border-radius:50%;width:26px;height:26px;flex-shrink:0;cursor:pointer;font-size:.7rem;display:none;align-items:center;justify-content:center;}'
     +'.filter-bar{padding:8px 14px 6px;border-bottom:1px solid var(--divider);display:flex;flex-direction:column;gap:5px;overflow-x:hidden;}'
